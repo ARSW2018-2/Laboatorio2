@@ -5,6 +5,8 @@
  */
 package edu.eci.arst.concprg.prodcons;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -25,7 +27,8 @@ public class Consumer extends Thread{
         while (true) {
 
             if (queue.size() > 0) {
-                int elem=queue.poll();
+                int elem=queue.poll();                
+                //int elem=queue.remove(0);
                 System.out.println("Consumer consumes "+elem);                                
             }
             

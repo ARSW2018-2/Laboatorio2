@@ -5,6 +5,8 @@
  */
 package edu.eci.arst.concprg.prodcons;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.logging.Level;
