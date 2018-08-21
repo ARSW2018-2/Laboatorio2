@@ -8,6 +8,8 @@ package edu.eci.arst.concprg.prodcons;
 import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,13 +25,18 @@ public class Consumer extends Thread{
     }
     
     @Override
-    public void run() {
+    public synchronized  void run() {
         while (true) {
 
             if (queue.size() > 0) {
                 int elem=queue.poll();                
                 //int elem=queue.remove(0);
                 System.out.println("Consumer consumes "+elem);                                
+            }
+            try {
+                queue.wait();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
