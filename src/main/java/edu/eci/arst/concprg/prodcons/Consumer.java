@@ -8,6 +8,7 @@ package edu.eci.arst.concprg.prodcons;
 import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,10 +18,10 @@ import java.util.logging.Logger;
  */
 public class Consumer extends Thread{
     
-    private Queue<Integer> queue;
+    private LinkedBlockingQueue queue;
     
     
-    public Consumer(Queue<Integer> queue){
+    public Consumer(LinkedBlockingQueue queue){
         this.queue=queue;        
     }
     
@@ -29,9 +30,10 @@ public class Consumer extends Thread{
         while (true) {
 
             if (queue.size() > 0) {
-                int elem=queue.poll();                
+           //if (queue.remove(this)) {
+                Object elem=queue.remove();                
                 //int elem=queue.remove(0);
-                System.out.println("Consumer consumes "+elem);                                
+                System.out.println("Consumer consumes "+elem.toString());                                
             }/**
             try {
                 queue.wait();

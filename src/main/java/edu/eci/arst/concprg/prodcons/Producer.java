@@ -9,6 +9,7 @@ import com.sun.javafx.scene.control.skin.VirtualFlow.ArrayLinkedList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,13 +19,13 @@ import java.util.logging.Logger;
  */
 public class Producer extends Thread {
 
-    private Queue<Integer> queue = null;
+    private LinkedBlockingQueue queue = null;
 
     private int dataSeed = 0;
     private Random rand=null;
     private final long stockLimit;
 
-    public Producer(Queue<Integer> queue,long stockLimit) {
+    public Producer(LinkedBlockingQueue queue,long stockLimit) {
         this.queue = queue;
         rand = new Random(System.currentTimeMillis());
         this.stockLimit=stockLimit;
@@ -32,21 +33,29 @@ public class Producer extends Thread {
 
     @Override
     public synchronized  void run() {
-        while (true&& queue.size()<10) {
-
+        while (queue.remainingCapacity()>1 ) {
+            
             dataSeed = dataSeed + rand.nextInt(100);
             System.out.println("Producer added " + dataSeed);
             queue.add(dataSeed);
-            
-            
+            //queue.add(dataSeed);
+            //queue.size()<10
+            /**
+            if(queue.size()-1<queue.){
+                System.out.println("Entramos");
+                queue.add(dataSeed);
+            }else{
+                System.out.println("Salimos");
+                interrupt();
+            }
+  **/
             try {
                 Thread.sleep(1000);
                 
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
-        
+
     }
 }
