@@ -21,16 +21,19 @@ public class StartProduction {
     
     public static void main(String[] args) {
         
-        Queue<Integer> queue=new LinkedBlockingQueue<>();
+        //Queue<Integer> queue=new LinkedBlockingQueue<>();
+        LinkedBlockingQueue queue=new LinkedBlockingQueue(10) ;   
         new Producer(queue,Long.MAX_VALUE).start();
         
         //let the producer create products for 5 seconds (stock).
         try {
 
             synchronized(queue)
+
             {
+                //Thread.sleep(5000);
                 queue.wait();
-                Thread.sleep(5000);
+
             }
             
         } catch (InterruptedException ex) {
@@ -39,6 +42,21 @@ public class StartProduction {
         
         
         new Consumer(queue).start();
+        
+        
+        try {
+
+        synchronized(queue)
+        {
+            queue.wait(5);
+            
+        }
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StartProduction.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+        
     }
     
 

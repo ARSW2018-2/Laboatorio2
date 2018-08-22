@@ -32,12 +32,12 @@ public class Consumer extends Thread{
                 int elem=queue.poll();                
                 //int elem=queue.remove(0);
                 System.out.println("Consumer consumes "+elem);                                
-            }
+            }/**
             try {
                 queue.wait();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }**/
             
         }
     }
