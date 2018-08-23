@@ -1,5 +1,6 @@
 package edu.eci.arsw.highlandersim;
 
+import com.sun.istack.internal.logging.Logger;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.LinkedList;
@@ -20,6 +21,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import javax.swing.JScrollBar;
 
 public class ControlFrame extends JFrame {
@@ -35,7 +38,7 @@ public class ControlFrame extends JFrame {
     private JLabel statisticsLabel;
     private JScrollPane scrollPane;
     private JTextField numOfImmortals;
-
+    private AtomicInteger contador= new AtomicInteger(0);
     /**
      * Launch the application.
      */
@@ -75,9 +78,8 @@ public class ControlFrame extends JFrame {
                 if (immortals != null) {
                     for (Immortal im : immortals) {
                         im.start();
-                    }
+                    }    
                 }
-
                 btnStart.setEnabled(false);
 
             }
@@ -87,16 +89,27 @@ public class ControlFrame extends JFrame {
         JButton btnPauseAndCheck = new JButton("Pause and check");
         btnPauseAndCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 /*
 				 * COMPLETAR
                  */
+                for(Immortal inmortal: immortals){
+                    inmortal.setPause(true);
+                }
+                try{
+                    while(contador.get()<immortals.size()){
+                        Thread.sleep(100);
+                    }
+                    
+                } catch (InterruptedException ex){
+                    Logger.getLogger(ControlFrame.class);
+                }
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
                 }
 
-                statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+                //statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+                output.setText(immortals.toString()+". SUm: "+sum);
                 
                 
 
@@ -108,10 +121,13 @@ public class ControlFrame extends JFrame {
 
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                /**
-                 * IMPLEMENTAR
-                 */
-
+                contador.set(0);
+                for(Immortal imor: immortals){
+                    imor.setPause(false);
+                 }
+                synchronized(immortals){
+                    immortals.notifyAll();
+                }
             }
         });
 
@@ -152,7 +168,7 @@ public class ControlFrame extends JFrame {
             List<Immortal> il = new LinkedList<Immortal>();
 
             for (int i = 0; i < ni; i++) {
-                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE,ucb);
+                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE,ucb,contador);
                 il.add(i1);
             }
             return il;
