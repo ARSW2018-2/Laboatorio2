@@ -29,14 +29,14 @@ public class StartProduction {
         //let the producer create products for 5 seconds (stock).
         try {
             Thread.sleep(5000);
-/**
+
             synchronized(queue)
             {
                 Thread.sleep(5000);
-                //queue.wait();
+                queue.notify();
 
             }
-   **/        
+           
         } catch (InterruptedException ex) {
             Logger.getLogger(StartProduction.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -50,7 +50,7 @@ public class StartProduction {
         synchronized(queue)
         {
             Thread.sleep(5000);
-            
+            queue.notify();
         }
             
         } catch (InterruptedException ex) {

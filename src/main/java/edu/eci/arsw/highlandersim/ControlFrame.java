@@ -134,7 +134,7 @@ public class ControlFrame extends JFrame {
                 synchronized(immortals){
                     immortals.notifyAll();
                 }
-                finishWork();
+                
             }
         });
 

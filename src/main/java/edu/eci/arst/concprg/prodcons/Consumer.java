@@ -30,17 +30,16 @@ public class Consumer extends Thread{
         while (true) {
 
             if (queue.size() > 0) {
-           //if (queue.remove(this)) {
                 Object elem=queue.remove();                
-                //int elem=queue.remove(0);
                 System.out.println("Consumer consumes "+elem.toString());                                
-            }/**
-            try {
-                queue.wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
-            }**/
-            
+            }else{/**
+                try {
+                    queue.wait();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+                }            
+            **/
+            }
         }
     }
 }

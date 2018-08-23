@@ -51,6 +51,9 @@ public class Producer extends Thread {
   **/
             try {
                 Thread.sleep(1000);
+                if(queue.remainingCapacity()==0 ){
+                    queue.wait();
+                }
                 
             } catch (InterruptedException ex) {
                 Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
