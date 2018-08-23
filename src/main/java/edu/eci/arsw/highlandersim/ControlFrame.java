@@ -1,6 +1,6 @@
 package edu.eci.arsw.highlandersim;
 
-import com.sun.istack.internal.logging.Logger;
+//import com.sun.istack.internal.logging.Logger;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.LinkedList;
@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import java.awt.Color;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JScrollBar;
 
 public class ControlFrame extends JFrame {
@@ -94,6 +95,8 @@ public class ControlFrame extends JFrame {
                  */
                 for(Immortal inmortal: immortals){
                     inmortal.setPause(true);
+                  
+                   
                 }
                 try{
                     while(contador.get()<immortals.size()){
@@ -101,16 +104,18 @@ public class ControlFrame extends JFrame {
                     }
                     
                 } catch (InterruptedException ex){
-                    Logger.getLogger(ControlFrame.class);
+                    //Logger.getLogger(ControlFrame.class);
+                    Logger.getLogger(ControlFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
                 }
 
                 //statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-                output.setText(immortals.toString()+". SUm: "+sum);
-                
+                statisticsLabel.setText("<html><br>Health sum:"+ sum);
+                //output.setText(immortals.toString()+". SUm: "+sum);
                 
 
             }
@@ -124,10 +129,12 @@ public class ControlFrame extends JFrame {
                 contador.set(0);
                 for(Immortal imor: immortals){
                     imor.setPause(false);
+                    
                  }
                 synchronized(immortals){
                     immortals.notifyAll();
                 }
+                finishWork();
             }
         });
 
@@ -143,6 +150,16 @@ public class ControlFrame extends JFrame {
 
         JButton btnStop = new JButton("STOP");
         btnStop.setForeground(Color.RED);
+        btnStop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // STOP
+                for(Immortal imm : immortals ){
+                    imm.setExecute(false);
+                }
+                output.setText("Finalizado\n" + immortals.toString()); 
+            }
+        });
+
         toolBar.add(btnStop);
 
         scrollPane = new JScrollPane();
@@ -158,6 +175,25 @@ public class ControlFrame extends JFrame {
 
     }
 
+    public void finishWork(){
+        int regulator=0;
+        for(Immortal imor: immortals){
+            if(imor.getHealth()>0){
+                regulator+=1;
+            }       
+        }
+        if(regulator==1){
+            
+            for(Immortal imm : immortals ){
+                imm.setExecute(false);
+            }            
+        
+        
+        }
+    
+    
+    }
+    
     public List<Immortal> setupInmortals() {
 
         ImmortalUpdateReportCallback ucb=new TextAreaUpdateReportCallback(output,scrollPane);

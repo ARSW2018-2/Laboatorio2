@@ -1,0 +1,16 @@
+
+2.El valor deberia ser el valor de la salud inicial * N.
+
+3.No, aunque la suma de la salud total si sea de los N inmortales aun en juego, ese valor va subiendo y subiendo con el paso del tiempo. El invariante no se cumple.
+
+
+7.NO, el programa no se detuvo en varios minutos que se dejó corriendo.
+
+
+
+
+
+
+10.Claro que se puede presentar inconsistencias, porque aunque el inmortal ya se encuentre muerto, el juego sigue ejecutandolo y le va cambiando sus valores(por valores positivos) pero sigue en el juego cuando deberia salir. Y lo causaria porque no podria llegar nunca a un final y nunca dejarian de pelearse todos contra todos.
+
+Se presenta que al tener muchos inmortales rondando por ahi, se vuelven a ejecutar los mismos de siempre y como se dijo anterior mente nunca acabarian.
